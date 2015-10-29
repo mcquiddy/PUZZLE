@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-10-28T19:20:14
+# Project created by QtCreator 2015-10-28T13:35:49
 #
 #-------------------------------------------------
 
@@ -8,13 +8,18 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = PUZZLE
+TARGET = 3ProyectoCorto
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    image.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    Constants.h \
+    linked_list.h \
+    Node.h \
+    image.h
 
 FORMS    += mainwindow.ui
