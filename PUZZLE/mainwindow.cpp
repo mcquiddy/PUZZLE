@@ -81,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent) {
 
 //changePos();
    adyacentes();
+
+
 }
 
 
@@ -131,6 +133,7 @@ int MainWindow::getProfundidad(){
 }
 
 int MainWindow::adyacentes(){
+    int rndm;
 
     for(int i=1; i<=raiz;i++){//fila
 
@@ -139,23 +142,28 @@ int MainWindow::adyacentes(){
         identificadores->insert_tail(listaImagen->rove(i)->get_data()->rove(j)->get_data().getId());
         //vecino izquierdo
         if((i-1)>0){
-            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i-1)->get_data()->rove(j)->get_data().getId());
 
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i-1)->get_data()->rove(j)->get_data().getId());
+            rndm= rand() % (cuadros*2)+1;
+            identificadores->get_tail()->getAdyacentes()->get_tail()->setPeso(rndm);
         }
         //vecino derecho
         if((i+1)<=raiz){
             identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i+1)->get_data()->rove(j)->get_data().getId());
-
+            rndm= rand() % (cuadros*2)+1;
+            identificadores->get_tail()->getAdyacentes()->get_tail()->setPeso(rndm);
         }
         //vecino arriba
         if((j-1)>0){
             identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i)->get_data()->rove(j-1)->get_data().getId());
-
+            rndm= rand() % (cuadros*2)+1;
+            identificadores->get_tail()->getAdyacentes()->get_tail()->setPeso(rndm);
         }
         //vecino de abajo
         if((j+1)<=raiz){
             identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i)->get_data()->rove(j+1)->get_data().getId());
-
+            rndm= rand() % (cuadros*2)+1;
+            identificadores->get_tail()->getAdyacentes()->get_tail()->setPeso(rndm);
         }
 
 
