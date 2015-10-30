@@ -41,9 +41,12 @@ public:
     int id1;//cambio de id
     int id2;//cambio de id
     int adyacentes();
-
+    void dikstra(int pIni);
+    void rotaciones(int pIni,int pMeta);
     lista<lista<Image>*> *listaImagen = new lista<lista<Image>*> ();
     listaSimple<int> *identificadores = new listaSimple<int> ();
+    listAdyacent<int> * listADY=  new listAdyacent<int>();
+    listAdyacent<int> * listCamino=  new listAdyacent<int>();
 
 
     QPen qPen;

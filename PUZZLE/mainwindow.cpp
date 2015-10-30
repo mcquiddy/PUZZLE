@@ -175,6 +175,153 @@ int MainWindow::adyacentes(){
         cout<<" fin"<<endl;
 
     }
+    listADY=  new listAdyacent<int>();//Limpiar lista de adyacencia
+    listCamino=  new listAdyacent<int>();//Limpiar lista de Camino que tiene que recorrer
+    this->dikstra(1);//Lista de todos los caminos mas cortos
+    this->rotaciones(1,9);//Lista ordenada de los caminos que tiene que rotar el cuadro
+}
+/**
+ * @brief MainWindow::dikstra
+ * @param pIni
+ * Cuadro que quiere mover
+ */
+void MainWindow::dikstra(int pIni)
+{
+    ///Lista para el control de caminos
+
+    for(int i=1; i<= identificadores->length();i++){
+        listADY->insert_tail(identificadores->rove(i)->get_data());
+
+
+    }
+
+    ////Aplicar Disktra///
+
+   int Inicio=pIni;// Posicion inicial donde se empezara a buscar
+
+   ////Fomar la primera lista de camino del punto de inicio
+   for(int i=1; i<=listADY->length();i++){
+       if(identificadores->rove(i)->get_data()==Inicio){
+           listADY->buscar(Inicio)->setEdicion(false);
+            listADY->buscar(Inicio)->set_padre(Inicio);
+       }
+       else{
+           NodeAdyacent<int> *temp=identificadores->buscar(Inicio)->getAdyacentes()->buscar(listADY->rove(i)->get_data());
+           if(temp!=NULL){
+                 listADY->rove(i)->setPeso(temp->getPeso());
+                 listADY->rove(i)->set_padre(identificadores->buscar(Inicio)->get_data());
+
+           }
+
+       }
+   }
+
+
+   //Encontrar el peso mas optimo
+   int optimo=0;
+   for(int i=1; i<=listADY->length();i++){
+       if(identificadores->rove(i)->get_data()!=Inicio){
+           if(optimo==0){
+               if(listADY->rove(i)->getPeso()!=0){
+                optimo= i;
+
+           }
+
+           }
+           else{
+               if(listADY->rove(optimo)->getPeso() > listADY->rove(i)->getPeso()){
+                   if(listADY->rove(i)->getPeso()!=0){
+                    optimo= i;
+
+               }
+           }
+       }
+
+   }
+   }
+   listADY->rove(optimo)->setEdicion(false);
+
+
+   cout<<"llllllllllllllllll"<<endl;
+   ///Empezar a econtrar el camino mas corto dependiendo del mas optmimo
+   for(int j=1; j<identificadores->length();j++){
+   for(int i=1; i<=identificadores->length();i++){
+       if(listADY->rove(i)->isEditable()){
+           //Cambiar peso
+           NodeAdyacent<int> *temp=identificadores->rove(optimo)->getAdyacentes()->buscar(listADY->rove(i)->get_data());
+
+           if(temp!=NULL){
+                int Newpeso=temp->getPeso()+listADY->rove(optimo)->getPeso();
+               if(listADY->rove(i)->getPeso()!=0){
+
+                if(Newpeso<listADY->rove(i)->getPeso()){
+
+                    listADY->rove(i)->setPeso(Newpeso);
+                    listADY->rove(i)->set_padre(identificadores->rove(optimo)->get_data());
+
+                }
+
+           }
+               else{
+                   listADY->rove(i)->setPeso(Newpeso);
+                    listADY->rove(i)->set_padre(identificadores->rove(optimo)->get_data());
+               }
+           }
+
+
+       }
+   }
+   //obtener optimo
+   optimo=0;
+   for(int i=1; i<=listADY->length();i++){
+       if(identificadores->rove(i)->get_data()!=Inicio){
+           if(optimo==0){
+               if(listADY->rove(i)->getPeso()!=0 &&  listADY->rove(i)->isEditable()){
+                optimo= i;
+
+
+           }
+           }
+           else{
+               if(listADY->rove(optimo)->getPeso() > listADY->rove(i)->getPeso()){
+                   if(listADY->rove(i)->getPeso()!=0 &&  listADY->rove(i)->isEditable()){
+                    optimo= i;
+
+               }
+           }
+       }
+
+   }
+   }
+   listADY->rove(optimo)->setEdicion(false);
+
+   //Final optimo
+
+   }
+   for(int i=1;i<=listADY->length();i++){
+       cout<<" id "<<listADY->rove(i)->get_data()<<" peso "<<listADY->rove(i)->getPeso()<<" padre "<<listADY->rove(i)->get_padre()<<endl;
+   }
+}
+/**
+ * @brief MainWindow::rotaciones
+ * @param pIni
+ * Cuadro que quiere mover
+ * @param pMeta
+ * Cuadro de meta a donde el cuadro a mover o inicial quiere llegar
+ */
+void MainWindow::rotaciones(int pIni, int pMeta)
+{
+    NodeAdyacent<int> * temp=listADY->buscar(pMeta);
+ cout<<"}}}}}}}}}}}}}}}}"<<endl;
+    while(temp->get_data()!=pIni){
+             listCamino->insert_head(temp->get_data());
+             temp=listADY->buscar(temp->get_padre());
+    }
+
+    for(int i=1;i<=listCamino->length();i++){
+        cout<<" id "<<listCamino->rove(i)->get_data()<<endl;
+    }
+
 }
 
 int MainWindow::changePos(){

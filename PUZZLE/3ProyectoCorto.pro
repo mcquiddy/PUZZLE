@@ -27,3 +27,6 @@ HEADERS  += mainwindow.h \
     NodoAdyacente.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    rec.qrc
