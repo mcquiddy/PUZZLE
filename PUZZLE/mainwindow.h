@@ -12,7 +12,10 @@
 #include <math.h>
 #include <image.h>
 #include <QGraphicsPixmapItem>
-
+#include <QPixmap>
+#include <QRgb>
+#include <listaSimple.h>
+#include <listaAdyacente.h>
 
 class MainWindow : public QGraphicsView
 {
@@ -32,11 +35,15 @@ public:
     QGraphicsRectItem* qRect;
     QGraphicsRectItem* item1 ;
     QRect qRectAux;
-    QBrush qBrush;
-    QColor color;
+
     QGraphicsPixmapItem *pm ;
+    int changePos();
+    int id1;//cambio de id
+    int id2;//cambio de id
+    int adyacentes();
 
     lista<lista<Image>*> *listaImagen = new lista<lista<Image>*> ();
+    listaSimple<int> *identificadores = new listaSimple<int> ();
 
 
     QPen qPen;

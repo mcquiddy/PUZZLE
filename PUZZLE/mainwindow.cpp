@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) {
     setFixedSize(WINDOWS_WIDTH,WINDOWS_HEIGHT);
     scene->setSceneRect(0,0,WINDOWS_WIDTH,WINDOWS_HEIGHT);
     QPixmap pix(BACKGROUND_IMAGE);
+
   // scene->addPixmap(pix);
     setScene(scene);
 
@@ -78,7 +79,8 @@ MainWindow::MainWindow(QWidget *parent) {
 
 
 
-
+//changePos();
+   adyacentes();
 }
 
 
@@ -126,4 +128,68 @@ int MainWindow::getProfundidad(){
       profundidad = QInputDialog::getInt(this, tr("QInputDialog::getInteger()"),  tr("Profundidad(1-5):"), 1, 0, 100, 1, &value);
       cout<<"prueba"<<endl;
            return profundidad;
+}
+
+int MainWindow::adyacentes(){
+
+    for(int i=1; i<=raiz;i++){//fila
+
+        for(int j=1;j<=raiz;j++){//columna
+
+        identificadores->insert_tail(listaImagen->rove(i)->get_data()->rove(j)->get_data().getId());
+        //vecino izquierdo
+        if((i-1)>0){
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i-1)->get_data()->rove(j)->get_data().getId());
+
+        }
+        //vecino derecho
+        if((i+1)<=raiz){
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i+1)->get_data()->rove(j)->get_data().getId());
+
+        }
+        //vecino arriba
+        if((j-1)>0){
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i)->get_data()->rove(j-1)->get_data().getId());
+
+        }
+        //vecino de abajo
+        if((j+1)<=raiz){
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i)->get_data()->rove(j+1)->get_data().getId());
+
+        }
+
+
+        }
+    }
+    for(int i=1; i<= identificadores->length();i++){
+        cout<<"ID :"<<identificadores->rove(i)->get_data()<<"lista adyacencia: "<<endl;
+        identificadores->rove(i)->getAdyacentes()->print_list();
+        cout<<" fin"<<endl;
+
+    }
+}
+
+int MainWindow::changePos(){
+     bool value;
+    while(datoValido){
+        id1= QInputDialog::getInt(this, tr("QInputDialog::getInteger()"),  tr("ingrese primer identificador(1-"+(cuadros)), 1, 0, 100, 1, &value);
+        if(id1>=(1) & id1<=cuadros){
+            break;
+        }
+
+    }
+    while(datoValido){
+        id2= QInputDialog::getInt(this, tr("QInputDialog::getInteger()"),  tr("ingrese primer identificador(1-"+(cuadros)), 1, 0, 100, 1, &value);
+        if(id2>=(1) & id2<=cuadros){
+            break;
+        }
+
+    }
+
+    cout<<"id1: "<<id1<<", "<<"id2: "<<id2<<endl;
+
+
+
+
+
 }

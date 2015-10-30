@@ -34,7 +34,7 @@ public:
     lista<lista<Image>*> *matriz = new lista<lista<Image>*> ();
     QPixmap getImagen() const;
     void setImagen(const QPixmap &value);
-    int rndm;
+    int rndm=1;
     int len=1;
 };
 

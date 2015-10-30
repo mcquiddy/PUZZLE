@@ -48,7 +48,7 @@ void Image::setPosX(int value)
 
  lista<lista<Image>*>*  Image::cutImage(QSize size, int cuadros){
 
-len=cuadros*cuadros;
+
     //Corta una sección de una imagen más grande
     for(int i=0; i<cuadros;i++){//fila
         for(int j=0;j<cuadros;j++){//columna
@@ -70,8 +70,9 @@ len=cuadros*cuadros;
 
             for(int j=0;j<cuadros;j++){//columna
 
+
                 rndm=  rand()%(listaTotal->length());
-                cout<<"bbbbbbbbbb len>: "<<listaTotal->length()<<endl;
+
                 while(rndm==0 & listaTotal->length()>1){
                     rndm=  rand() % (listaTotal->length());
                 }

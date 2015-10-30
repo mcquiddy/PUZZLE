@@ -20,6 +20,10 @@ HEADERS  += mainwindow.h \
     Constants.h \
     linked_list.h \
     Node.h \
-    image.h
+    image.h \
+    NodeSimple.h \
+    listaSimple.h \
+    listaAdyacente.h \
+    NodoAdyacente.h
 
 FORMS    += mainwindow.ui
