@@ -12,6 +12,7 @@ private:
     int peso;
 
 public:
+     T get_padre();
     NodeAdyacent(T dato) ;
     T get_data();
     void set_next(NodeAdyacent* next_node);
@@ -23,7 +24,7 @@ public:
     bool isEditable();
     NodeAdyacent* get_next();
     NodeAdyacent* get_prev();
-    T get_padre();
+
 };
 /**
  * Constructor of a Node

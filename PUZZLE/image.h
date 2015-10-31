@@ -14,28 +14,20 @@ class Image
 {
 public:
     Image();
-    int posX;
-    int posY;
-    int id;
-    QPixmap imagen;
-    lista<Image> *listaTotal = new lista<Image> ();
-
-   // QLabel label;
-
+    QPixmap imagen;//guarda la imagen cortada
+    lista<Image*> *listaTotal = new lista<Image*>();//guarda en orden la imagen cortada, corta toda la primera columna en orden arriba hacia abajo y pasa a la siguiente
+    int id;//guarda el id de la imagen, se asigna en el orden en que se corten
+    lista<lista<Image*>*> *matriz = new lista<lista<Image*>*> ();//matriz que guarda la imagen desordenada, y la imprime en pantalla
+    int rndm=1;//numero random que sirve para crear la matriz con la imagen desordenada
+    int len=1;//asigna el id
 
 
-  lista<lista<Image> *> *cutImage(QSize size, int cuadros);
-    int getPosX() const;
-    void setPosX(int value);
-    int getPosY() const;
-    void setPosY(int value);
-    int getId() const;
-    void setId(int value);
-    lista<lista<Image>*> *matriz = new lista<lista<Image>*> ();
-    QPixmap getImagen() const;
-    void setImagen(const QPixmap &value);
-    int rndm=1;
-    int len=1;
+    void setID(int value);
+    int getID();
+    lista<lista<Image *> *> *cutImage(QSize size, int cuadros);
+    QPixmap getImagen();
+    void setImagen(QPixmap value);
+
 };
 
 #endif // IMAGE_H

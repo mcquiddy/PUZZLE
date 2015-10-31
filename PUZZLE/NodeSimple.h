@@ -10,11 +10,12 @@ private:
     listAdyacent<int> * listAdyacentes;
 
 public:
+    listAdyacent<int> * getAdyacentes();
     NodeSimple(T dato) ;
     T get_data();
     void set_next(NodeSimple* next_node);
     void set_prev(NodeSimple* prev_node);
-    listAdyacent<int> * getAdyacentes();
+
 
     NodeSimple* get_next();
     NodeSimple* get_prev();

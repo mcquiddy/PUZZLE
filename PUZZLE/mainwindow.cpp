@@ -46,8 +46,9 @@ MainWindow::MainWindow(QWidget *parent) {
     for(int i=1; i<=raiz;i++){//fila
         for(int j=1;j<=raiz;j++){//columna
 
-       pm=scene->addPixmap(listaImagen->rove(i)->get_data()->rove(j)->get_data().getImagen());
+       pm=scene->addPixmap(listaImagen->rove(i)->get_data()->rove(j)->get_data()->getImagen());
        pm->setPos( (i-1)*sizeX,(j-1)*sizeY);
+
 
         }
    }
@@ -56,31 +57,32 @@ MainWindow::MainWindow(QWidget *parent) {
      //setScene(scene);
 
 
-    if(profundidad>=1){
-
-        if(profundidad==1){
-            qLine.setLine(WINDOWS_WIDTH/2,0,WINDOWS_WIDTH/2,WINDOWS_HEIGHT);//
-            scene->addLine(qLine);
-            qLine.setLine(0,WINDOWS_HEIGHT/2,WINDOWS_WIDTH,WINDOWS_HEIGHT/2);//
-            scene->addLine(qLine);
-            cout<<"cantidad de cuadros: "<<cuadros<<endl;
-
-        }
-        else if(profundidad>1){
-            qLine.setLine(WINDOWS_WIDTH/2,0,WINDOWS_WIDTH/2,WINDOWS_HEIGHT);//
-            scene->addLine(qLine);
-            qLine.setLine(0,WINDOWS_HEIGHT/2,WINDOWS_WIDTH,WINDOWS_HEIGHT/2);//
-            scene->addLine(qLine);
-            splitImage(0,0,WINDOWS_WIDTH,WINDOWS_HEIGHT,profundidad-1);
-            cout<<"cantidad de cuadros: "<<cuadros<<endl;
-
-        }
-     }
 
 
 
-//changePos();
-   adyacentes();
+
+
+  goloso();
+  if(profundidad>=1){
+
+      if(profundidad==1){
+          qLine.setLine(WINDOWS_WIDTH/2,0,WINDOWS_WIDTH/2,WINDOWS_HEIGHT);//
+          scene->addLine(qLine);
+          qLine.setLine(0,WINDOWS_HEIGHT/2,WINDOWS_WIDTH,WINDOWS_HEIGHT/2);//
+          scene->addLine(qLine);
+          cout<<"cantidad de cuadros: "<<cuadros<<endl;
+
+      }
+      else if(profundidad>1){
+          qLine.setLine(WINDOWS_WIDTH/2,0,WINDOWS_WIDTH/2,WINDOWS_HEIGHT);//
+          scene->addLine(qLine);
+          qLine.setLine(0,WINDOWS_HEIGHT/2,WINDOWS_WIDTH,WINDOWS_HEIGHT/2);//
+          scene->addLine(qLine);
+          splitImage(0,0,WINDOWS_WIDTH,WINDOWS_HEIGHT,profundidad-1);
+          cout<<"cantidad de cuadros: "<<cuadros<<endl;
+
+      }
+   }
 
 
 }
@@ -128,40 +130,43 @@ int MainWindow::getProfundidad(){
     bool value;
 
       profundidad = QInputDialog::getInt(this, tr("QInputDialog::getInteger()"),  tr("Profundidad(1-5):"), 1, 0, 100, 1, &value);
-      cout<<"prueba"<<endl;
+
            return profundidad;
 }
 
-int MainWindow::adyacentes(){
+void MainWindow::adyacentes(){
+    while(identificadores->length()>=1){
+        identificadores->delete_Pos(1);
+    }
     int rndm;
 
     for(int i=1; i<=raiz;i++){//fila
 
         for(int j=1;j<=raiz;j++){//columna
 
-        identificadores->insert_tail(listaImagen->rove(i)->get_data()->rove(j)->get_data().getId());
+        identificadores->insert_tail(listaImagen->rove(i)->get_data()->rove(j)->get_data()->getID());
         //vecino izquierdo
         if((i-1)>0){
 
-            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i-1)->get_data()->rove(j)->get_data().getId());
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i-1)->get_data()->rove(j)->get_data()->getID());
             rndm= rand() % (cuadros*2)+1;
             identificadores->get_tail()->getAdyacentes()->get_tail()->setPeso(rndm);
         }
         //vecino derecho
         if((i+1)<=raiz){
-            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i+1)->get_data()->rove(j)->get_data().getId());
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i+1)->get_data()->rove(j)->get_data()->getID());
             rndm= rand() % (cuadros*2)+1;
             identificadores->get_tail()->getAdyacentes()->get_tail()->setPeso(rndm);
         }
         //vecino arriba
         if((j-1)>0){
-            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i)->get_data()->rove(j-1)->get_data().getId());
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i)->get_data()->rove(j-1)->get_data()->getID());
             rndm= rand() % (cuadros*2)+1;
             identificadores->get_tail()->getAdyacentes()->get_tail()->setPeso(rndm);
         }
         //vecino de abajo
         if((j+1)<=raiz){
-            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i)->get_data()->rove(j+1)->get_data().getId());
+            identificadores->get_tail()->getAdyacentes()->insert_tail(listaImagen->rove(i)->get_data()->rove(j+1)->get_data()->getID());
             rndm= rand() % (cuadros*2)+1;
             identificadores->get_tail()->getAdyacentes()->get_tail()->setPeso(rndm);
         }
@@ -175,25 +180,101 @@ int MainWindow::adyacentes(){
         cout<<" fin"<<endl;
 
     }
-    listADY=  new listAdyacent<int>();//Limpiar lista de adyacencia
-    listCamino=  new listAdyacent<int>();//Limpiar lista de Camino que tiene que recorrer
-    this->dikstra(1);//Lista de todos los caminos mas cortos
-    this->rotaciones(1,9);//Lista ordenada de los caminos que tiene que rotar el cuadro
+
+
 }
+void MainWindow::goloso(){
+
+   for(int len=1;len<=cuadros;len++){
+       adyacentes();
+       listADY=  new listAdyacent<int>();//Limpiar lista de adyacencia
+       listCamino=  new listAdyacent<int>();//Limpiar lista de Camino que tiene que recorrer
+
+       cout<<"------------"<<endl;
+    int lenAux;
+      int meta;
+
+        cout<<"despues de diskctra"<<endl;
+        this->dikstra(len);//Lista de todos los caminos mas cortos
+
+        lenAux=len;
+
+            for(int i=1;i<=raiz;i++){
+                for (int j=1; j<=raiz;j++){
+
+                    if(lenAux==1){
+                        meta= listaImagen->rove(i)->get_data()->rove(j)->get_data()->getID() ;
+                    }
+                    lenAux-=1;
+                }
+            }
+
+
+        cout<<"prueba: "<<meta<<endl;
+        if(len!=meta){
+            this->rotaciones(len,meta);//Lista ordenada de los caminos que tiene que rotar el cuadro
+            if(listCamino->get_tail()->get_data()!=len){
+                    listCamino->insert_tail(len);
+
+            }
+            cout<<"id1: "<<len<<",meta: "<<meta <<endl;
+            listCamino->print_list();
+
+            while(listCamino->length()>1){
+
+                changePos(len,listCamino->rove(1)->get_data());
+                listCamino->delete_data(listCamino->rove(1)->get_data());
+                listCamino->print_list();
+
+            }
+            cout<<"fin cambio para un identificador"<<endl;
+
+            for(int i=1; i<=raiz;i++){//fila
+                for(int j=1;j<=raiz;j++){//columna
+
+               pm=scene->addPixmap(listaImagen->rove(i)->get_data()->rove(j)->get_data()->getImagen());
+               pm->setPos( (i-1)*sizeX,(j-1)*sizeY);
+                }
+             }
+       }
+
+
+         cout<<"------------"<<endl;
+
+
+
+
+    }
+
+
+
+
+}
+
+
+
+
+
+
 /**
  * @brief MainWindow::dikstra
  * @param pIni
  * Cuadro que quiere mover
  */
+
+
 void MainWindow::dikstra(int pIni)
 {
     ///Lista para el control de caminos
-
+    while(listADY->length()>=1){
+        listADY->delete_Pos(1);
+    }
     for(int i=1; i<= identificadores->length();i++){
         listADY->insert_tail(identificadores->rove(i)->get_data());
 
 
     }
+
 
     ////Aplicar Disktra///
 
@@ -201,6 +282,7 @@ void MainWindow::dikstra(int pIni)
 
    ////Fomar la primera lista de camino del punto de inicio
    for(int i=1; i<=listADY->length();i++){
+
        if(identificadores->rove(i)->get_data()==Inicio){
            listADY->buscar(Inicio)->setEdicion(false);
             listADY->buscar(Inicio)->set_padre(Inicio);
@@ -215,6 +297,7 @@ void MainWindow::dikstra(int pIni)
 
        }
    }
+
 
 
    //Encontrar el peso mas optimo
@@ -312,7 +395,7 @@ void MainWindow::dikstra(int pIni)
 void MainWindow::rotaciones(int pIni, int pMeta)
 {
     NodeAdyacent<int> * temp=listADY->buscar(pMeta);
- cout<<"}}}}}}}}}}}}}}}}"<<endl;
+ //cout<<"}}}}}}}}}}}}}}}}"<<endl;
     while(temp->get_data()!=pIni){
              listCamino->insert_head(temp->get_data());
              temp=listADY->buscar(temp->get_padre());
@@ -324,27 +407,56 @@ void MainWindow::rotaciones(int pIni, int pMeta)
 
 }
 
-int MainWindow::changePos(){
-     bool value;
-    while(datoValido){
-        id1= QInputDialog::getInt(this, tr("QInputDialog::getInteger()"),  tr("ingrese primer identificador(1-"+(cuadros)), 1, 0, 100, 1, &value);
-        if(id1>=(1) & id1<=cuadros){
-            break;
+int MainWindow::changePos(int id1, int id2){
+
+    int a=1;
+    int b=1;
+    QPixmap imagenID1;
+    QPixmap imagenID2;
+
+
+
+    for(int i=1;i<=raiz;i++){
+        for(int j=1;j<=raiz;j++){
+            if(listaImagen->rove(i)->get_data()->rove(j)->get_data()->getID()==id1){
+               a=i;
+               b=j;
+            imagenID1=listaImagen->rove(i)->get_data()->rove(j)->get_data()->getImagen();
+
+
+            }
+
         }
 
     }
-    while(datoValido){
-        id2= QInputDialog::getInt(this, tr("QInputDialog::getInteger()"),  tr("ingrese primer identificador(1-"+(cuadros)), 1, 0, 100, 1, &value);
-        if(id2>=(1) & id2<=cuadros){
-            break;
+
+
+    for(int i=1;i<=raiz;i++){
+        for(int j=1;j<=raiz;j++){
+            if(listaImagen->rove(i)->get_data()->rove(j)->get_data()->getID()==id2){
+                 imagenID2=listaImagen->rove(i)->get_data()->rove(j)->get_data()->getImagen();
+                 listaImagen->rove(i)->get_data()->rove(j)->get_data()->setImagen(imagenID1);
+                 listaImagen->rove(i)->get_data()->rove(j)->get_data()->setID(id1);
+            }
         }
+    }
+    for(int i=1;i<=a;i++){
+        for(int j=1;j<=b;j++){
+
+            if(i==a & j==b){
+               listaImagen->rove(i)->get_data()->rove(j)->get_data()->setID(id2) ;
+               listaImagen->rove(i)->get_data()->rove(j)->get_data()->setImagen(imagenID2);
+            }
+        }
+    }
+    cout<<"fin changePos, id1:"<<id1<<", id2: "<<id2<<endl;
 
     }
 
-    cout<<"id1: "<<id1<<", "<<"id2: "<<id2<<endl;
 
 
 
 
 
-}
+
+

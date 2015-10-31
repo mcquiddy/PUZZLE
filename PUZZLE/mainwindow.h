@@ -29,44 +29,36 @@ public:
 
     QGraphicsScene* scene;
     QWidget *parent;
-    int getProfundidad();
 
-    QLine qLine;
-    QGraphicsRectItem* qRect;
-    QGraphicsRectItem* item1 ;
-    QRect qRectAux;
+
+    QLine qLine;//lineas que divide los recuadros en los que se recorta la imagen
+
 
     QGraphicsPixmapItem *pm ;
-    int changePos();
-    int id1;//cambio de id
-    int id2;//cambio de id
-    int adyacentes();
-    void dikstra(int pIni);
-    void rotaciones(int pIni,int pMeta);
-    lista<lista<Image>*> *listaImagen = new lista<lista<Image>*> ();
+    lista<lista<Image*>*> *listaImagen = new lista<lista<Image*>*> ();
     listaSimple<int> *identificadores = new listaSimple<int> ();
     listAdyacent<int> * listADY=  new listAdyacent<int>();
     listAdyacent<int> * listCamino=  new listAdyacent<int>();
-
-
     QPen qPen;
     QSize qSize;
     Image *matriz= new Image();
+    double sizeX;//tamano en pixeles en x de cada cuadro
+    double sizeY;//tamano en pixeles en  y de cada cuadro
+    int raiz;//cantidad de divisiones en x(mismas que en y)
+    bool datoValido=true;//controla que la profundidad introducida por el usuario sea valida
+    int profundidad=6;//obtine el valor ingresado por el usuario
+    int  cuadros;//cantidad de cuadros en los que se recorta la imagen
+    int id1;//cambio de id
+    int id2;//cambio de id
 
-    double sizeX;
-    double sizeY;
-
-    int raiz;
-    bool datoValido=true;
-     int profundidad=6;
-
-
-   lista<QColor*> *colores= new lista<QColor*>;
-
-
-    int  cuadros;
+    int changePos(int id1, int id2);
+    void adyacentes();
+    void dikstra(int pIni);
+    void rotaciones(int pIni,int pMeta);
+     int getProfundidad();
     int splitImage(int x1, int y1,int x2, int y2, int profundidad);
     void PaintImage();
+    void goloso();
 
 
 };

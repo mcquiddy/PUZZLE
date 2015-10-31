@@ -16,7 +16,7 @@ private:
 
 public:
 	Node(T dato) ;
-	T get_data();
+    T get_data();
 	void set_next(Node* next_node);
 	void set_prev(Node* prev_node);
 	Node* get_next();
