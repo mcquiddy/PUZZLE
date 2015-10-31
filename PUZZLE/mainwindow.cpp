@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
+MainWindow * MainWindow::unicMain=NULL;
 MainWindow::MainWindow(QWidget *parent) {
 
 
@@ -18,14 +18,13 @@ MainWindow::MainWindow(QWidget *parent) {
     setScene(scene);
 
     qPen.setColor(Qt::blue);//color de las lineas que dividen la imagen
-
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 
     while(datoValido){
         getProfundidad();
-        if(profundidad>=1 & profundidad<=5){
+        if(profundidad>=1 & profundidad<=3){
             break;
         }
     }
@@ -50,10 +49,12 @@ MainWindow::MainWindow(QWidget *parent) {
        pm->setPos( (i-1)*sizeX,(j-1)*sizeY);
 
 
+
         }
    }
 
-  //  qRect = new QGraphicsRectItem(qRectAux);
+
+  //qRect = new QGraphicsRectItem(qRectAux);
      //setScene(scene);
 
 
@@ -61,32 +62,34 @@ MainWindow::MainWindow(QWidget *parent) {
 
 
 
+this->show();
 
-  goloso();
-  if(profundidad>=1){
 
-      if(profundidad==1){
-          qLine.setLine(WINDOWS_WIDTH/2,0,WINDOWS_WIDTH/2,WINDOWS_HEIGHT);//
-          scene->addLine(qLine);
-          qLine.setLine(0,WINDOWS_HEIGHT/2,WINDOWS_WIDTH,WINDOWS_HEIGHT/2);//
-          scene->addLine(qLine);
-          cout<<"cantidad de cuadros: "<<cuadros<<endl;
-
-      }
-      else if(profundidad>1){
-          qLine.setLine(WINDOWS_WIDTH/2,0,WINDOWS_WIDTH/2,WINDOWS_HEIGHT);//
-          scene->addLine(qLine);
-          qLine.setLine(0,WINDOWS_HEIGHT/2,WINDOWS_WIDTH,WINDOWS_HEIGHT/2);//
-          scene->addLine(qLine);
-          splitImage(0,0,WINDOWS_WIDTH,WINDOWS_HEIGHT,profundidad-1);
-          cout<<"cantidad de cuadros: "<<cuadros<<endl;
-
-      }
-   }
 
 
 }
+int MainWindow::splitImageAux(){
+    if(profundidad>=1){
 
+        if(profundidad==1){
+            qLine.setLine(WINDOWS_WIDTH/2,0,WINDOWS_WIDTH/2,WINDOWS_HEIGHT);//
+            scene->addLine(qLine);
+            qLine.setLine(0,WINDOWS_HEIGHT/2,WINDOWS_WIDTH,WINDOWS_HEIGHT/2);//
+            scene->addLine(qLine);
+            cout<<"cantidad de cuadros: "<<cuadros<<endl;
+
+        }
+        else if(profundidad>1){
+            qLine.setLine(WINDOWS_WIDTH/2,0,WINDOWS_WIDTH/2,WINDOWS_HEIGHT);//
+            scene->addLine(qLine);
+            qLine.setLine(0,WINDOWS_HEIGHT/2,WINDOWS_WIDTH,WINDOWS_HEIGHT/2);//
+            scene->addLine(qLine);
+            splitImage(0,0,WINDOWS_WIDTH,WINDOWS_HEIGHT,profundidad-1);
+            cout<<"cantidad de cuadros: "<<cuadros<<endl;
+
+        }
+     }
+}
 
 int MainWindow::splitImage(int x1, int y1,int x2, int y2, int profundidad){
 
@@ -223,20 +226,41 @@ void MainWindow::goloso(){
             while(listCamino->length()>1){
 
                 changePos(len,listCamino->rove(1)->get_data());
+                QThread espera;
+                espera.usleep(2000000);
+
+                for(int i=1; i<=raiz;i++){//fila
+                    for(int j=1;j<=raiz;j++){//columna
+
+                   pm=scene->addPixmap(listaImagen->rove(i)->get_data()->rove(j)->get_data()->getImagen());
+                   pm->setPos( (i-1)*sizeX,(j-1)*sizeY);
+                   scene->update();
+                    }
+                 }
+                 //setScene(scene);
+               // this->show();
+
                 listCamino->delete_data(listCamino->rove(1)->get_data());
                 listCamino->print_list();
 
             }
-            cout<<"fin cambio para un identificador"<<endl;
+//            setScene(scene);
 
-            for(int i=1; i<=raiz;i++){//fila
-                for(int j=1;j<=raiz;j++){//columna
 
-               pm=scene->addPixmap(listaImagen->rove(i)->get_data()->rove(j)->get_data()->getImagen());
-               pm->setPos( (i-1)*sizeX,(j-1)*sizeY);
-                }
-             }
+
+
+
        }
+
+        for(int i=1; i<=raiz;i++){//fila
+            for(int j=1;j<=raiz;j++){//columna
+
+           pm=scene->addPixmap(listaImagen->rove(i)->get_data()->rove(j)->get_data()->getImagen());
+           pm->setPos( (i-1)*sizeX,(j-1)*sizeY);
+            }
+         }
+
+        cout<<"fin cambio para un identificador"<<endl;
 
 
          cout<<"------------"<<endl;
@@ -249,6 +273,13 @@ void MainWindow::goloso(){
 
 
 
+}
+
+MainWindow *MainWindow::getInstance()
+{
+    if(unicMain==NULL)
+        unicMain=new MainWindow();
+    return unicMain;
 }
 
 
@@ -413,6 +444,10 @@ int MainWindow::changePos(int id1, int id2){
     int b=1;
     QPixmap imagenID1;
     QPixmap imagenID2;
+
+
+
+
 
 
 

@@ -16,6 +16,8 @@
 #include <QRgb>
 #include <listaSimple.h>
 #include <listaAdyacente.h>
+#include <QTimer>
+#include  <QThread>
 
 class MainWindow : public QGraphicsView
 {
@@ -50,6 +52,7 @@ public:
     int  cuadros;//cantidad de cuadros en los que se recorta la imagen
     int id1;//cambio de id
     int id2;//cambio de id
+    int splitImageAux();
 
     int changePos(int id1, int id2);
     void adyacentes();
@@ -59,7 +62,9 @@ public:
     int splitImage(int x1, int y1,int x2, int y2, int profundidad);
     void PaintImage();
     void goloso();
-
+    static MainWindow* getInstance();
+private:
+    static MainWindow* unicMain;
 
 };
 

@@ -33,6 +33,7 @@ int Image::getID(){
  lista<lista<Image*>*>*  Image::cutImage(QSize size, int cuadros){
 
 
+
     //Corta una sección de una imagen más grande
     for(int i=0; i<cuadros;i++){//fila
         for(int j=0;j<cuadros;j++){//columna

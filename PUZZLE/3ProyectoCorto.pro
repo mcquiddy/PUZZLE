@@ -14,7 +14,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    image.cpp
+    image.cpp \
+    ordenar.cpp
 
 HEADERS  += mainwindow.h \
     Constants.h \
@@ -24,7 +25,8 @@ HEADERS  += mainwindow.h \
     NodeSimple.h \
     listaSimple.h \
     listaAdyacente.h \
-    NodoAdyacente.h
+    NodoAdyacente.h \
+    ordenar.h
 
 FORMS    += mainwindow.ui
 
